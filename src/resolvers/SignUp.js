@@ -8,9 +8,26 @@ const SignUp = (parent, args) => {
     console.log(result);
   });
 
- const token =  jwt.sign({ foo: "bar" }, "por3jgpemg9erjg", { expiresIn: "1h" });
+  const token = jwt.sign({ foo: "bar" }, "por3jgpemg9erjg", {
+    expiresIn: "1h",
+  });
 
   return token;
 };
 
-module.exports = SignUp;
+const SignIn = (parent, args) => {
+  const { email, password } = args;
+
+  var sql = "SELECT * FROM users WHERE email  = ? AND password = ?";
+
+  connection.execute(sql, [email, password], (err, res) => {
+    if (err) {
+      return err;
+    }
+
+    console.log(res[0]);
+    return res[0];
+  });
+};
+
+module.exports = { SignUp, SignIn };

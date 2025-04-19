@@ -1,4 +1,4 @@
-const SignUp = require("../resolvers/SignUp");
+const { SignUp, SignIn } = require("../resolvers/SignUp");
 
 const resolvers = {
   Query: {
@@ -7,6 +7,7 @@ const resolvers = {
 
   Mutation: {
     SignUp: SignUp,
+    SignIn: SignIn,
   },
 };
 
