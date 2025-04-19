@@ -13,7 +13,7 @@ const LinkShorten = async (parent, args) => {
 
     const sql = "INSERT INTO urls (url, shorturl) VALUES (?,?)";
 
-     await connection.promise().execute(sql, [url, shortUrl]);
+    await connection.promise().execute(sql, [url, shortUrl]);
 
     return shortUrl;
   } catch (error) {
