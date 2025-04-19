@@ -15,7 +15,6 @@ const SignUp = async (parent, args) => {
   } catch (error) {
     console.log(error);
   }
-
 };
 
 const SignIn = async (parent, args) => {

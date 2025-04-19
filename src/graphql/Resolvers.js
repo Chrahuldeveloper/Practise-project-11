@@ -1,3 +1,4 @@
+const LinkShorten = require("../resolvers/LinkShorten");
 const { SignUp, SignIn } = require("../resolvers/SignUp");
 
 const resolvers = {
@@ -8,6 +9,7 @@ const resolvers = {
   Mutation: {
     SignUp: SignUp,
     SignIn: SignIn,
+    LinkShorten: LinkShorten,
   },
 };
 
