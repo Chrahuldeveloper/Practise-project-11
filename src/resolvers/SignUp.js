@@ -1,33 +1,51 @@
 const connection = require("../../dbconfig/ConnectDb");
 const jwt = require("jsonwebtoken");
-const SignUp = (parent, args) => {
+const SignUp = async (parent, args) => {
   const { name, email, password } = args;
   var sql = "INSERT INTO users (name, email, password) VALUES (?,?,?)";
-  connection.query(sql, [name, email, password], function (err, result) {
-    if (err) throw err;
-    console.log(result);
-  });
 
-  const token = jwt.sign({ foo: "bar" }, "por3jgpemg9erjg", {
-    expiresIn: "1h",
-  });
+  try {
+    await connection.promise().execute(sql, [name, email, password]);
 
-  return token;
+    const token = jwt.sign({ foo: "bar" }, "por3jgpemg9erjg", {
+      expiresIn: "1h",
+    });
+
+    return token;
+  } catch (error) {
+    console.log(error);
+  }
+
 };
 
-const SignIn = (parent, args) => {
+const SignIn = async (parent, args) => {
   const { email, password } = args;
 
-  var sql = "SELECT * FROM users WHERE email  = ? AND password = ?";
+  try {
+    var sql = "SELECT * FROM users WHERE email  = ? AND password = ?";
+    const [results] = await connection
+      .promise()
+      .execute(sql, [email, password]);
 
-  connection.execute(sql, [email, password], (err, res) => {
-    if (err) {
-      return err;
+    if (results.length === 0) {
+      throw new Error("Invalid credentials");
     }
 
-    console.log(res[0]);
-    return res[0];
-  });
+    const user = {
+      id: results[0].id,
+      name: results[0].name,
+      email: results[0].email,
+      password: results[0].password,
+    };
+
+    const token = jwt.sign({ foo: user.password }, "por3jgpemg9erjg", {
+      expiresIn: "1h",
+    });
+
+    return token;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = { SignUp, SignIn };
